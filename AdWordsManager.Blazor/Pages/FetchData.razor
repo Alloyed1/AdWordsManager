@@ -1,0 +1,66 @@
+﻿@page "/fetchdata"
+
+@using AdWordsManager.Blazor.Data
+@using AdWordsManager.Services.Services
+@using AdWordsManager.Data.Models
+@using AdWordsManager.Data.DTo
+@using AdWordsManager.Helper.Enums
+@inject IAdService AdSerivce
+@inject GoogleAdWordsService _service
+
+<h1>Реклама</h1>
+
+
+@if (_ads == null)
+{
+<p><em>Loading...</em></p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>CPM</th>
+            <th>Статус</th>
+            <th>Просмотры</th>
+            <th>Показы</th>
+            <th>Бюджет</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var forecast in _ads)
+            {
+        <tr>
+            <td>@forecast.Name</td>
+            <td>@forecast.CPM</td>
+            <td>@GetAdStatus(forecast.Status)</td>
+            <td>@forecast.View <input type="number" @bind="forecast.MetricView" name="name2" /></td>
+            <td>@forecast.PokazCount</td>
+            <td>@forecast.Budget <input type="number" @bind="forecast.MetricBudget" name="name1" /> </td>
+            <td><button @onclick="(() => { Update(forecast); })" class="btn btn-success">Сохранять</button></td>
+        </tr>
+            }
+    </tbody>
+</table>
+}
+
+@code {
+    private List<NormalizeAd> _ads = new List<NormalizeAd>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _ads = await AdSerivce.GetAds();
+    }
+
+    private string GetAdStatus(AdStatus status)
+    {
+        return status == AdStatus.Stop ? "Остановлена" : "Активна";
+    }
+
+    private void Update(NormalizeAd ad)
+    {
+        AdSerivce.UpdateAdMetric(ad).GetAwaiter().GetResult();
+    }
+
+}

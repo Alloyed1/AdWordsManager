@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>313d91df-c4e3-4c3f-9b60-86cecff29035</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.AdWords" Version="24.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdWordsManager.Context\AdWordsManager.Context.csproj" />
+    <ProjectReference Include="..\AdWordsManager.Data\AdWordsManager.Data.csproj" />
+    <ProjectReference Include="..\AdWordsManager.Helper\AdWordsManager.Helper.csproj" />
+    <ProjectReference Include="..\AdWordsManager.Services\AdWordsManager.Services.csproj" />
+  </ItemGroup>
+
+</Project>
