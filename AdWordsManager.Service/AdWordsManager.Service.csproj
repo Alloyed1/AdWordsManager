@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.49.0.2175" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AdWordsManager.Data\AdWordsManager.Data.csproj" />
     <ProjectReference Include="..\AdWordsManager.Services\AdWordsManager.Providers.csproj" />
   </ItemGroup>
