@@ -13,6 +13,7 @@ using AdWordsManager.Blazor.Data;
 using AdWordsManager.Providers.Providers;
 using Google.Api.Ads.AdWords.Lib;
 using AdWordsManager.Data.POCO;
+using AdWordsManager.Service.GoogleSpreadSheets;
 
 namespace AdWordsManager.Blazor
 {
@@ -25,19 +26,16 @@ namespace AdWordsManager.Blazor
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<IAdProvider, AdProvider>();
             services.AddSingleton<IManagerAccountProvider, ManagerAccountProvider>();
-            //services.AddSingleton<AdWordsAppConfig>(scope => new AdWordsAppConfig(Configuration.GetSection("AdWordsApi")));
-            //services.AddScoped<GoogleAdWordsService>();
+            services.AddSingleton<IGoogleSpreadSheetService, GoogleSpreadSheetService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -47,7 +45,6 @@ namespace AdWordsManager.Blazor
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

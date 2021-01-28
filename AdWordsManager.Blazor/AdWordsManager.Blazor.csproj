@@ -14,6 +14,7 @@
     <ProjectReference Include="..\AdWordsManager.Data\AdWordsManager.Data.csproj" />
     <ProjectReference Include="..\AdWordsManager.Helper\AdWordsManager.Helper.csproj" />
     <ProjectReference Include="..\AdWordsManager.Services\AdWordsManager.Providers.csproj" />
+    <ProjectReference Include="..\AdWordsManager.Service\AdWordsManager.Service.csproj" />
   </ItemGroup>
 
 </Project>
