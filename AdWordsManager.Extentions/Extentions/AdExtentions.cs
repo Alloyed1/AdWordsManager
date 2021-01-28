@@ -1,5 +1,5 @@
-﻿using AdWordsManager.Data.DTo;
-using AdWordsManager.Data.Models;
+﻿using AdWordsManager.Data.DTO;
+using AdWordsManager.Data.POCO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -1,20 +1,16 @@
-﻿using AdWordsManager.Helper.Enums;
+﻿using AdWordsManager.Data.Base;
+using AdWordsManager.Helper.Enums;
 using LinqToDB.Mapping;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdWordsManager.Data.Models
+namespace AdWordsManager.Data.POCO
 {
     [Table("Ads")]
-    public class NormalizeAd
+    public sealed class NormalizeAd : PocoBase
     {
-
-        [Key]
-        [PrimaryKey, Identity]
-        [Column("Id")]
-        public int Id { get; set; }
         [Column("Name")]
         public string Name { get; set; }
         [Column("Link")]

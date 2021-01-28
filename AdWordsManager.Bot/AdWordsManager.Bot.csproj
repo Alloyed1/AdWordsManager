@@ -331,9 +331,9 @@
       <Project>{14f627fa-72ae-4b61-9e09-8ec8c0b61067}</Project>
       <Name>AdWordsManager.Helper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AdWordsManager.Services\AdWordsManager.Services.csproj">
+    <ProjectReference Include="..\AdWordsManager.Services\AdWordsManager.Providers.csproj">
       <Project>{649D27D0-BD7A-4186-BEFE-5243AD3EC050}</Project>
-      <Name>AdWordsManager.Services</Name>
+      <Name>AdWordsManager.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

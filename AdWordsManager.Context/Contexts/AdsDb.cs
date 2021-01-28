@@ -1,4 +1,4 @@
-﻿using AdWordsManager.Data.Models;
+﻿using AdWordsManager.Data.POCO;
 using LinqToDB;
 using System;
 

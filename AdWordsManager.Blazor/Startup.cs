@@ -10,8 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AdWordsManager.Blazor.Data;
-using AdWordsManager.Services.Services;
+using AdWordsManager.Providers.Providers;
 using Google.Api.Ads.AdWords.Lib;
+using AdWordsManager.Data.POCO;
 
 namespace AdWordsManager.Blazor
 {
@@ -30,9 +31,10 @@ namespace AdWordsManager.Blazor
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<IAdService, AdService>();
-            services.AddSingleton<AdWordsAppConfig>(scope => new AdWordsAppConfig(Configuration.GetSection("AdWordsApi")));
-            services.AddScoped<GoogleAdWordsService>();
+            services.AddSingleton<IAdProvider, AdProvider>();
+            services.AddSingleton<IManagerAccountProvider, ManagerAccountProvider>();
+            //services.AddSingleton<AdWordsAppConfig>(scope => new AdWordsAppConfig(Configuration.GetSection("AdWordsApi")));
+            //services.AddScoped<GoogleAdWordsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

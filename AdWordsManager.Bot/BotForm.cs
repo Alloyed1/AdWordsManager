@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AdWordsManager.Extentions.Extentions;
-using AdWordsManager.Services.Services;
+using AdWordsManager.Providers.Providers;
 
 
 
@@ -12,19 +12,19 @@ namespace AdWordsManager.Bot
 {
     public partial class BotForm : Form
     {
-        private static IAdService _adService = new AdService();
+        private readonly IAdProvider _adService;
         public BotForm()
         {
             InitializeComponent();
-
+            _adService = new AdProvider();
         }
 
-        private async void startButton_Click(object sender, EventArgs e)
+        private  void startButton_Click(object sender, EventArgs e)
         {
             _ = Task.Run(() => SeleniumBot.Work());
         }
 
-        private async void BotForm_Load(object sender, EventArgs e)
+        private  void BotForm_Load(object sender, EventArgs e)
         {
             //var html = HttpUtility.HtmlDecode("18 500").Replace(" ","");
             //var ads = await _adService.GetAds();

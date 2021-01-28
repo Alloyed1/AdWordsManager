@@ -1,12 +1,11 @@
 ﻿@page "/fetchdata"
 
 @using AdWordsManager.Blazor.Data
-@using AdWordsManager.Services.Services
-@using AdWordsManager.Data.Models
-@using AdWordsManager.Data.DTo
+@using AdWordsManager.Providers.Providers
+@using AdWordsManager.Data.POCO
+@using AdWordsManager.Data.DTO
 @using AdWordsManager.Helper.Enums
-@inject IAdService AdSerivce
-@inject GoogleAdWordsService _service
+@inject IAdProvider AdProvider
 
 <h1>Реклама</h1>
 
@@ -50,7 +49,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _ads = await AdSerivce.GetAds();
+        _ads = await AdProvider.GetAll();
     }
 
     private string GetAdStatus(AdStatus status)
@@ -60,7 +59,7 @@ else
 
     private void Update(NormalizeAd ad)
     {
-        AdSerivce.UpdateAdMetric(ad).GetAwaiter().GetResult();
+        AdProvider.UpdateAdMetric(ad).GetAwaiter().GetResult();
     }
 
 }

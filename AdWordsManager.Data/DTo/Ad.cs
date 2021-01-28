@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AdWordsManager.Data.DTo
+namespace AdWordsManager.Data.DTO
 {
 
     public class Ad

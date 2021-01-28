@@ -1,7 +1,7 @@
-﻿using AdWordsManager.Data.DTo;
+﻿using AdWordsManager.Data.DTO;
+using AdWordsManager.Data.POCO;
 using AdWordsManager.Extentions.Extentions;
 using AdWordsManager.Helper.Enums;
-using AdWordsManager.Services.Services;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using AdWordsManager.Providers.Providers;
 
 namespace AdWordsManager.Bot
 {
@@ -19,9 +20,9 @@ namespace AdWordsManager.Bot
     {
         private static IWebDriver _driver;
         private static List<string> _campaningUrls = new List<string>();
-        private static IAdService _adService = new AdService();
+        private readonly static IAdProvider _adService = new AdProvider();
         private static string _mainUrl;
-        public static async Task Initialize()
+        public static void Initialize()
         {
             
             var options = new ChromeOptions();
@@ -69,14 +70,14 @@ namespace AdWordsManager.Bot
                         }
                     }
 
-                    await _adService.AddAd(normAd);
+                    await _adService.Create(normAd);
 
 
 
 
 
                 }
-                catch(Exception ex)
+                catch
                 {
                 }
                 
@@ -106,11 +107,8 @@ namespace AdWordsManager.Bot
             _mainUrl = _driver.Url;
             while (true)
             {
-                //await Task.Delay(25* 1000);
                 try
                 {
-                    
-                    //_driver.FindElements(By.TagName("a")).FirstOrDefault(f => f.GetAttribute("minerva-id") == "Campaigns-tab").Click();
                     await Task.Delay(10 * 1000);
 
                     var campanings = _driver.FindElements(By.ClassName("ess-cell-link"));
@@ -121,21 +119,6 @@ namespace AdWordsManager.Bot
                     var listData = _driver.FindElements(By.ClassName("particle-table-row")).Reverse().Skip(2);
                     await ParseAd(listData.ToList());
 
-                    //foreach (var camp in campanings)
-                    //{
-                    //    camp.Click();
-                    //    await Task.Delay(17 * 1000);
-                    //    var groups = _driver.FindElements(By.ClassName("ess-cell-link"));
-                    //    var urlGroup = _driver.Url;
-                    //    foreach (var group in groups)
-                    //    {
-                    //        group.Click();
-                    //        await Task.Delay(17 * 1000);
-                    //        _driver.Navigate().GoToUrl(urlGroup);
-                    //    }
-                    //    _driver.Navigate().GoToUrl(urlCamp);
-                    //    await Task.Delay(10 * 1000);
-                    //}
                     _driver.Navigate().Refresh();
 
                 }

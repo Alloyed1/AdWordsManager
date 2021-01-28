@@ -1,16 +1,40 @@
 ﻿@page "/counter"
+@using AdWordsManager.Data.POCO;
+@using AdWordsManager.Providers.Providers
+@inject IManagerAccountProvider ManagerAccountService
 
-<h1>Counter</h1>
-
-<p>Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+@if (_managerAccounts.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Занят ботом</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in _managerAccounts)
+            {
+            <tr>
+                <td>@account.Name</td>
+                <td>@IsBusy(account)</td>
+                <!--<td><button @onclick="(() => { Update(forecast); })" class="btn btn-success">Сохранять</button></td>-->
+            </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     private int currentCount = 0;
+    private List<ManagerAccounts> _managerAccounts = new List<ManagerAccounts>();
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        _managerAccounts = await ManagerAccountService.GetAll();
+    }
+    private string IsBusy(ManagerAccounts managerAccounts)
+    {
+        return managerAccounts.IsBusy ? "Да" : "Нет";
     }
 }

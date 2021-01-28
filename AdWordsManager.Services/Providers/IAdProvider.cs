@@ -1,25 +1,21 @@
-﻿using AdWordsManager.Data.Models;
-using System;
+﻿using AdWordsManager.Data.POCO;
 using System.Threading.Tasks;
 using AdWordsManager.Context.Contexts;
 using LinqToDB;
-using LinqToDB.Data;
-using System.Collections.Generic;
 using System.Linq;
+using AdWordsManager.Providers.BaseProvider;
 
-namespace AdWordsManager.Services.Services
+namespace AdWordsManager.Providers.Providers
 {
-    public interface IAdService
+    public interface IAdProvider : IBaseModelProvider<NormalizeAd>
     {
-        Task<List<NormalizeAd>> GetAds();
-        Task AddAd(NormalizeAd ad);
         Task<NormalizeAd> FindAdByNameAndAccountId(string name, string accountname);
-        Task UpdateAd(NormalizeAd ad);
         Task UpdateAdMetric(NormalizeAd ad);
     }
-    public class AdService : IAdService
+
+    public sealed class AdProvider : BaseModelProvider<NormalizeAd>, IAdProvider
     {
-        public async Task AddAd(NormalizeAd ad)
+        public override async Task Create(NormalizeAd ad)
         {
             using(var db = new AdsDb())
             {
@@ -39,16 +35,7 @@ namespace AdWordsManager.Services.Services
         {
             using (var db = new AdsDb())
             {
-                return await db.Ads.FirstOrDefaultAsync(f => f.Name == name && f.AccountNumber == accountname);
-            }
-        }
-
-        public async Task<List<NormalizeAd>> GetAds()
-        {
-            using (var db = new AdsDb())
-            {
-                
-                return await db.Ads.ToListAsync();
+                return await FirstOrDefault(f => f.Name == name && f.AccountNumber == accountname);
             }
         }
 
@@ -56,13 +43,7 @@ namespace AdWordsManager.Services.Services
         {
             using(var db = new AdsDb())
             {
-                await db.Ads.Where(w => w.Name == ad.Name)
-                        .Set(s => s.Link, ad.Link)
-                        .Set(s => s.PokazCount, ad.PokazCount)
-                        .Set(s => s.Status, ad.Status)
-                        .Set(s => s.View, ad.View)
-                        .Set(s => s.CPM, ad.CPM)
-                        .UpdateAsync();
+                await db.UpdateAsync(ad);
             }
         }
         public async Task UpdateAdMetric(NormalizeAd ad)
