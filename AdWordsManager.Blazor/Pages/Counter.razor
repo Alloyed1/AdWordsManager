@@ -1,10 +1,7 @@
 ﻿@page "/counter"
 @using AdWordsManager.Data.POCO;
-@using AdWordsManager.Providers.Providers;
-@using AdWordsManager.Service.GoogleSpreadSheets;
-
+@using AdWordsManager.Providers.Providers
 @inject IManagerAccountProvider ManagerAccountService
-@inject IGoogleSpreadSheetService GoogleSpreadSheet
 
 @if (_managerAccounts.Any())
 {
@@ -18,11 +15,11 @@
         <tbody>
             @foreach (var account in _managerAccounts)
             {
-                <tr>
-                    <td>@account.Name</td>
-                    <td>@IsBusy(account)</td>
-                    <!--<td><button @onclick="(() => { Update(forecast); })" class="btn btn-success">Сохранять</button></td>-->
-                </tr>
+            <tr>
+                <td>@account.Name</td>
+                <td>@IsBusy(account)</td>
+                <!--<td><button @onclick="(() => { Update(forecast); })" class="btn btn-success">Сохранять</button></td>-->
+            </tr>
             }
         </tbody>
     </table>
@@ -34,12 +31,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _managerAccounts = await ManagerAccountService.GetAll();
-
+        _managerAccounts = (await ManagerAccountService.GetAll()).ToList();
     }
     private string IsBusy(ManagerAccounts managerAccounts)
     {
-      
         return managerAccounts.IsBusy ? "Да" : "Нет";
     }
 }

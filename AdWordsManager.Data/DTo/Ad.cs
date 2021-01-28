@@ -8,7 +8,7 @@ using System.Text;
 namespace AdWordsManager.Data.DTO
 {
 
-    public class Ad
+    public sealed class Ad
     {
 
         public int Id { get; set; }

@@ -13,12 +13,12 @@ namespace AdWordsManager.Providers.BaseProvider
     {
         public IQueryable<TDbModel> GetQueryable()
         {
-            return new DataContext().GetTable<TDbModel>();
+            return new AdsDb().GetTable<TDbModel>();
         }
 
         public async Task<TDbModel> GetById(int id)
         {
-            return await new DataContext()
+            return await new AdsDb()
                             .GetTable<TDbModel>()
                             .FirstOrDefaultAsync(m => m.Id == id);
         }
@@ -26,32 +26,32 @@ namespace AdWordsManager.Providers.BaseProvider
         public async Task<IEnumerable<TResult>> Select<TResult>(Expression<Func<TDbModel, bool>> predicate,
             Expression<Func<TDbModel, TResult>> selector)
         {
-            return await new DataContext()
+            return await new AdsDb()
                 .GetTable<TDbModel>()
                 .Where(predicate)
                 .Select(selector)
-                .ToListAsync();
+                .ToArrayAsync();
 
         }
 
         public async Task<TDbModel> FirstOrDefault(Expression<Func<TDbModel, bool>> predicate)
         {
-            return await new DataContext()
+            return await new AdsDb()
                 .GetTable<TDbModel>()
                 .FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<List<TDbModel>> GetAll() 
+        public async Task<IEnumerable<TDbModel>> GetAll() 
         {
-            return await new DataContext().GetTable<TDbModel>().ToListAsync();
+            return await new AdsDb().GetTable<TDbModel>().ToArrayAsync();
         }
         public async Task Update(TDbModel model)
         {
-           await new DataContext().UpdateAsync(model);
+           await new AdsDb().UpdateAsync(model);
         }
         public virtual async Task Create(TDbModel model)
         {
-            await new DataContext().InsertAsync(model);
+            await new AdsDb().InsertAsync(model);
         }
     }
 }

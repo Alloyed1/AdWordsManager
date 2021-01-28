@@ -1,10 +1,6 @@
 ﻿using AdWordsManager.Data.Base;
 using AdWordsManager.Helper.Enums;
 using LinqToDB.Mapping;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace AdWordsManager.Data.POCO
 {
@@ -29,7 +25,10 @@ namespace AdWordsManager.Data.POCO
         public string AccountNumber { get; set; }
         [Column("PokazCount")]
         public int PokazCount { get; set; }
+        
         [Column("Status")]
         public AdStatus Status { get; set; }
+        //[Column("ManagerAccountId"), NotNull]
+        //public int ManagerAccountId { get; set; }
     }
 }
