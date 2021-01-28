@@ -31,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _managerAccounts = await ManagerAccountService.GetAll();
+        _managerAccounts = (await ManagerAccountService.GetAll()).ToList();
     }
     private string IsBusy(ManagerAccounts managerAccounts)
     {

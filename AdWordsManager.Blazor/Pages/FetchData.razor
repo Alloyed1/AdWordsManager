@@ -49,7 +49,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _ads = await AdProvider.GetAll();
+        _ads = (await AdProvider.GetAll()).ToList();
     }
 
     private string GetAdStatus(AdStatus status)
