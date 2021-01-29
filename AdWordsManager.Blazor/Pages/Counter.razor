@@ -1,33 +1,64 @@
 ﻿@page "/counter"
 @using AdWordsManager.Data.POCO;
 @using AdWordsManager.Providers.Providers
+@using LinqToDB.Common
 @inject IManagerAccountProvider ManagerAccountService
 
 @if (_managerAccounts.Any())
 {
+    <button class="btn btn-success" @onclick="(() => { IsAddItem = true;})">Добавить</button>
     <table class="table">
         <thead>
-            <tr>
-                <th>Имя</th>
-                <th>Занят ботом</th>
-            </tr>
+        <tr>
+            <th>Имя</th>
+            <th>Занят ботом</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var account in _managerAccounts)
-            {
+        @foreach (var account in _managerAccounts)
+        {
             <tr>
                 <td>@account.Name</td>
                 <td>@IsBusy(account)</td>
-                <!--<td><button @onclick="(() => { Update(forecast); })" class="btn btn-success">Сохранять</button></td>-->
+                <td><button @onclick="(() => { SetUpdateItem(account); })" class="btn btn-success">Изменить</button></td>
             </tr>
-            }
+        }
         </tbody>
     </table>
+    @if (IsAddItem)
+    {
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Имя</label>
+                <input type="text" @bind="AddItem.Name" class="form-control" id="exampleInputEmail1" placeholder="Имя">
+                <small id="emailHelp" class="form-text text-muted" value="@ErrorMessageAdd"></small>
+            </div>
+            <button type="submit" class="btn btn-primary" @onclick="( async() => {  await Create(); })">Создать</button>
+        </form>
+    }
+    @if (IsUpdateItem)
+    {
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Имя</label>
+                <input type="text" @bind="UpdateItem.Name" class="form-control" id="exampleInputEmail1" placeholder="Имя">
+                <small id="emailHelp" class="form-text text-muted" value="@ErrorMessageUpdate"></small>
+            </div>
+            <button type="submit" class="btn btn-primary" @onclick="( async() => {  await Update(); })">Сохранить</button>
+        </form>
+    }
 }
 
 @code {
     private int currentCount = 0;
     private List<ManagerAccounts> _managerAccounts = new List<ManagerAccounts>();
+    private bool IsAddItem;
+    private bool IsUpdateItem;
+    private string ErrorMessageAdd = "";
+    private string ErrorMessageUpdate = "";
+
+    private ManagerAccounts AddItem = new ManagerAccounts();
+    private ManagerAccounts UpdateItem;
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,5 +67,41 @@
     private string IsBusy(ManagerAccounts managerAccounts)
     {
         return managerAccounts.IsBusy ? "Да" : "Нет";
+    }
+
+    private void SetUpdateItem(ManagerAccounts account)
+    {
+        UpdateItem = account;
+        IsUpdateItem = true;
+    }
+
+    private async Task Update()
+    {
+        if (AddItem.Name.IsNullOrEmpty())
+        {
+            ErrorMessageUpdate = "Имя должно быть заполнено";
+        }
+        
+        await ManagerAccountService.Update(UpdateItem);
+        ErrorMessageAdd = string.Empty;
+        AddItem = new ManagerAccounts();
+        IsAddItem = false;
+        
+    }
+
+    private async Task Create()
+    {
+        if (AddItem.Name.IsNullOrEmpty())
+        {
+            ErrorMessageAdd = "Имя должно быть заполнено";
+            return;
+        }
+        await ManagerAccountService.Create(AddItem);
+        ErrorMessageUpdate = string.Empty;
+        UpdateItem = new ManagerAccounts();
+        IsUpdateItem = false;
+        
+        _managerAccounts = (await ManagerAccountService.GetAll()).ToList();
+
     }
 }

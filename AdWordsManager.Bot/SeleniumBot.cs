@@ -20,11 +20,36 @@ namespace AdWordsManager.Bot
     {
         private static IWebDriver _driver;
         private static List<string> _campaningUrls = new List<string>();
-        private readonly static IAdProvider _adService = new AdProvider();
+        
+        private static readonly IAdProvider _adProvider;
+        private static readonly IManagerAccountProvider _managerAccountProvider;
+
+        private static ManagerAccounts _managerAccount;
+        
         private static string _mainUrl;
-        public static void Initialize()
+
+
+        static SeleniumBot()
         {
-            
+            _adProvider = new AdProvider();
+            _managerAccountProvider = new ManagerAccountProvider();
+        }
+
+
+        public static async Task<IEnumerable<ManagerAccounts>> GetAllManagerAccounts()
+        {
+            return await _managerAccountProvider.Select<ManagerAccounts>(w => !w.IsBusy, s => s);
+        }
+
+        public static void SetManagerAccount(ManagerAccounts managerAccounts)
+        {
+
+            _managerAccount = managerAccounts;
+        }
+        
+        public static async Task Initialize()
+        {
+
             var options = new ChromeOptions();
             options.AddArgument("--lang=ru");
             _driver = new ChromeDriver(options);
@@ -32,6 +57,29 @@ namespace AdWordsManager.Bot
 
             //await Work();
         }
+
+        public static void Dispose()
+        {
+            _driver.Close();
+            _driver.Dispose();
+            
+        }
+
+        public static async Task ChangeBusyAccountManager(bool busy)
+        {
+            if (_managerAccount == null) return;
+            _managerAccount.IsBusy = busy;
+            try
+            {
+                await _managerAccountProvider.Update(_managerAccount);
+            }
+            catch(Exception ex)
+            {
+
+            }
+            
+        }
+
         private static async Task ParseAd(List<IWebElement> listData)
         {
 
@@ -55,7 +103,7 @@ namespace AdWordsManager.Bot
                     ad.Budget = HttpUtility.HtmlDecode(cells.FirstOrDefault(f => f.GetAttribute("essfield") == "stats.cost").FindElement(By.TagName("div")).GetAttribute("textContent")).Replace("₽", "").Replace(",", ".").Replace(" ", "");
                     ad.AccountNumber = cells.FirstOrDefault(f => f.GetAttribute("essfield") == "entity_owner_info.descriptive_name").FindElement(By.ClassName("ess-cell-link")).GetAttribute("textContent");
                     var normAd = ad.Normalize();
-                    var dbAd = await _adService.FindAdByNameAndAccountId(ad.Name, ad.AccountNumber);
+                    var dbAd = await _adProvider.FindAdByNameAndIdAndManagerAccount(ad.Name, ad.AccountNumber, _managerAccount.Id);
 
                     if (dbAd != null)
                     {
@@ -69,12 +117,8 @@ namespace AdWordsManager.Bot
                             ad.Status = AdStatus.Stop;
                         }
                     }
-
-                    await _adService.Create(normAd);
-
-
-
-
+                    normAd.ManagerAccountId = _managerAccount.Id;
+                    await _adProvider.Create(normAd);
 
                 }
                 catch
@@ -104,6 +148,8 @@ namespace AdWordsManager.Bot
         
         public static async Task Work()
         {
+            await ChangeBusyAccountManager(true);
+            await ChangeBusyAccountManager(false);
             _mainUrl = _driver.Url;
             while (true)
             {
