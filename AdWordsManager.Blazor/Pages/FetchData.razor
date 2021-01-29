@@ -16,6 +16,13 @@
 }
 else
 {
+    <select @bind="SelectedManagerAccountId" class="form-control form-control-sm">
+        <option value="0">Все</option>
+        @foreach (var item in _ads.GroupBy(g => g.ManagerAccountId).Select(s => s.Key).Distinct())
+        {
+            <option value="@item" >@_ads.FirstOrDefault(f => f.ManagerAccountId == item)?.ManagerAccount.Name</option>
+        }
+    </select>
 <table class="table">
     <thead>
         <tr>
@@ -25,10 +32,12 @@ else
             <th>Просмотры</th>
             <th>Показы</th>
             <th>Бюджет</th>
+            <th>Управляющий аккаунт</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var forecast in _ads)
+        @foreach (var forecast in _ads.Where(w => w.ManagerAccountId == SelectedManagerAccountId 
+                                                  || SelectedManagerAccountId == 0))
             {
         <tr>
             <td>@forecast.Name</td>
@@ -37,6 +46,7 @@ else
             <td>@forecast.View <input type="number" @bind="forecast.MetricView" name="name2" /></td>
             <td>@forecast.PokazCount</td>
             <td>@forecast.Budget <input type="number" @bind="forecast.MetricBudget" name="name1" /> </td>
+            <td>@forecast.ManagerAccount.Name</td>
             <td><button @onclick="(() => { Update(forecast); })" class="btn btn-success">Сохранять</button></td>
         </tr>
             }
@@ -45,11 +55,12 @@ else
 }
 
 @code {
-    private List<NormalizeAd> _ads = new List<NormalizeAd>();
+    private IEnumerable<NormalizeAd> _ads;
+    private int SelectedManagerAccountId;
 
     protected override async Task OnInitializedAsync()
     {
-        _ads = (await AdProvider.GetAll()).ToList();
+        _ads = await AdProvider.GetAll(x => x.ManagerAccount);
     }
 
     private string GetAdStatus(AdStatus status)

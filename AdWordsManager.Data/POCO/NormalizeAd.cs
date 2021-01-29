@@ -28,7 +28,11 @@ namespace AdWordsManager.Data.POCO
         
         [Column("Status")]
         public AdStatus Status { get; set; }
-        //[Column("ManagerAccountId"), NotNull]
-        //public int ManagerAccountId { get; set; }
+        [Column("ManagerAccountId")]
+        public int ManagerAccountId { get; set; }
+        
+        [Association(ThisKey = nameof(ManagerAccountId), OtherKey = "Id")]
+        public ManagerAccounts ManagerAccount { get; set; }
+        
     }
 }

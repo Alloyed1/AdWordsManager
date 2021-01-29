@@ -9,7 +9,7 @@ namespace AdWordsManager.Providers.Providers
 {
     public interface IAdProvider : IBaseModelProvider<NormalizeAd>
     {
-        Task<NormalizeAd> FindAdByNameAndId(string name, string accountname);
+        Task<NormalizeAd> FindAdByNameAndIdAndManagerAccount(string name, string accountname, int managetAccountId);
         Task UpdateAdMetric(NormalizeAd ad);
     }
 
@@ -19,7 +19,7 @@ namespace AdWordsManager.Providers.Providers
         {
             using(var db = new AdsDb())
             {
-                var adDb = await FindAdByNameAndId(ad.Name, ad.AccountNumber);
+                var adDb = await FindAdByNameAndIdAndManagerAccount(ad.Name, ad.AccountNumber, ad.ManagerAccountId);
                 if (adDb != null)
                 {
                     await Update(ad);
@@ -29,11 +29,11 @@ namespace AdWordsManager.Providers.Providers
             }
         }
 
-        public async Task<NormalizeAd> FindAdByNameAndId(string name, string accountname)
+        public async Task<NormalizeAd> FindAdByNameAndIdAndManagerAccount(string name, string accountname, int managetAccountId)
         {
             using (var db = new AdsDb())
             {
-                return await FirstOrDefault(f => f.Name == name && f.AccountNumber == accountname);
+                return await FirstOrDefault(f => f.Name == name && f.AccountNumber == accountname && f.ManagerAccountId == managetAccountId);
             }
         }
         

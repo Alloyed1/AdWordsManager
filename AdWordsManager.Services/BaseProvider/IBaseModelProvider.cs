@@ -12,6 +12,7 @@ namespace AdWordsManager.Providers.BaseProvider
     public interface IBaseModelProvider<TDbModel> where TDbModel : PocoBase
     {
         Task<IEnumerable<TDbModel>> GetAll();
+        Task<IEnumerable<TDbModel>> GetAll(Expression<Func<TDbModel, object>> predicate);
         Task Update(TDbModel model);
         Task Create(TDbModel model);
         Task<TDbModel> GetById(int id);

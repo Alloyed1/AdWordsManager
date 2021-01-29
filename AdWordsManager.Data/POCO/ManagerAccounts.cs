@@ -13,5 +13,10 @@ namespace AdWordsManager.Data.POCO
         public string Name { get; set; }
         [Column("IsBusy")]
         public bool IsBusy { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -45,6 +45,12 @@ namespace AdWordsManager.Providers.BaseProvider
         {
             return await new AdsDb().GetTable<TDbModel>().ToArrayAsync();
         }
+        public async Task<IEnumerable<TDbModel>> GetAll(Expression<Func<TDbModel, object>> predicate)
+        {
+            return await new AdsDb().GetTable<TDbModel>()
+                .LoadWith(predicate)
+                .ToArrayAsync();
+        }
         public async Task Update(TDbModel model)
         {
            await new AdsDb().UpdateAsync(model);
