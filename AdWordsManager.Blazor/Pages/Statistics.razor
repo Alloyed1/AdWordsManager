@@ -1,0 +1,12 @@
+﻿@page "/statistic"
+@using AdWordsManager.Service.GoogleSpreadSheets
+@inject IGoogleSpreadSheetService GoogleSpreadSheetService
+
+<button class="btn btn-success" @onclick="WrtieGoogle">Выгрузить</button>
+
+@code {
+    public void WrtieGoogle()
+    {
+        GoogleSpreadSheetService.Push();
+    }
+}

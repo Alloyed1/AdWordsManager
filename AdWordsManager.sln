@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWordsManager.Blazor", "Ad
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWordsManager.Extentions", "AdWordsManager.Extentions\AdWordsManager.Extentions.csproj", "{C10E1D1F-A3B2-4F72-A2D0-42B2BF3E75AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdWordsManager.Service", "AdWordsManager.Service\AdWordsManager.Service.csproj", "{43CDB8EF-1FE1-4E9A-9A66-BD1C01BACBB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWordsManager.Service", "AdWordsManager.Service\AdWordsManager.Service.csproj", "{43CDB8EF-1FE1-4E9A-9A66-BD1C01BACBB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

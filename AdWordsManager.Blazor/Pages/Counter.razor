@@ -4,6 +4,7 @@
 @using LinqToDB.Common
 @inject IManagerAccountProvider ManagerAccountService
 
+
 @if (_managerAccounts.Any())
 {
     <button class="btn btn-success" @onclick="(() => { IsAddItem = true;})">Добавить</button>
@@ -63,6 +64,7 @@
     protected override async Task OnInitializedAsync()
     {
         _managerAccounts = (await ManagerAccountService.GetAll()).ToList();
+        
     }
     private string IsBusy(ManagerAccounts managerAccounts)
     {
@@ -81,12 +83,12 @@
         {
             ErrorMessageUpdate = "Имя должно быть заполнено";
         }
-        
+
         await ManagerAccountService.Update(UpdateItem);
         ErrorMessageAdd = string.Empty;
         AddItem = new ManagerAccounts();
         IsAddItem = false;
-        
+
     }
 
     private async Task Create()
@@ -100,7 +102,7 @@
         ErrorMessageUpdate = string.Empty;
         UpdateItem = new ManagerAccounts();
         IsUpdateItem = false;
-        
+
         _managerAccounts = (await ManagerAccountService.GetAll()).ToList();
 
     }
